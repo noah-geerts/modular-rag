@@ -1,6 +1,6 @@
-from chunk_storage import ChunkStorage
-from typing import List, Optional
-from langchain_core.documents import Document
+from chunk_storages.chunk_storage import ChunkStorage
+from typing import List
+from rag_types.chunk import Chunk
 import sqlite3
 import json
 
@@ -29,22 +29,20 @@ class SQLiteChunkStorage(ChunkStorage):
       )
       self.conn.commit()
 
-  def store_chunks(self, chunks: List[Document]) -> List[int]:
+  def store_chunks(self, chunks: List[Chunk]) -> List[int]:
     ids = []
     for chunk in chunks:
-      chunk_dictionary = {"page_content": chunk.page_content, "metadata": chunk.metadata}
-      chunk_json = json.dumps(chunk_dictionary)
+      chunk_json = json.dumps(chunk)
       self.cur.execute(f"INSERT INTO {self.table_name} (chunk_json) VALUES (?) RETURNING id", (chunk_json,))
       ids.append(self.cur.fetchone()[0])
     self.conn.commit()
     return ids
   
-  def retrieve_chunks(self, ids: List[int]) -> List[Document]:
+  def retrieve_chunks(self, ids: List[int]) -> List[Chunk]:
     if not ids:
       return []
     id_placeholders = ",".join("?" for _ in ids)
     self.cur.execute(f"SELECT chunk_json FROM {self.table_name} WHERE id IN ({id_placeholders})", ids)
     rows = self.cur.fetchall()
-    dictionaries = [json.loads(row[0]) for row in rows]
-    documents = [Document(page_content=d["page_content"], metadata=d["metadata"]) for d in dictionaries]
-    return documents
+    chunks = [json.loads(row[0]) for row in rows]
+    return chunks

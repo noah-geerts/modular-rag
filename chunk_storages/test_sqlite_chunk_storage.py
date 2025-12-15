@@ -1,8 +1,9 @@
 import unittest
 import os
 import sqlite3
-from langchain_core.documents import Document
-from sqlite_chunk_storage import SQLiteChunkStorage
+from typing import List
+from chunk_storages.sqlite_chunk_storage import SQLiteChunkStorage
+from rag_types.chunk import Chunk
 
 SQLITE_DB_NAME = 'test_chunks.db'
 SQLITE_TABLE_NAME = 'chunks'
@@ -23,10 +24,10 @@ class TestSQLiteChunkStorage(unittest.TestCase):
 
   def test_store_and_retrieve_chunks(self):
     # Arrange
-    expectedChunks = [
-      Document(page_content="a", metadata={"original_content": {"image": "niceImageA", "table": "coolTableA"}}),
-      Document(page_content="b", metadata={"original_content": {"image": "niceImageB", "table": "coolTableB"}}),
-      Document(page_content="c", metadata={"original_content": {"image": "niceImageC", "table": "coolTableC"}})
+    expectedChunks: List[Chunk] = [
+      {"page_content": "a", "metadata": {"original_content": {"image": "niceImageA", "table": "coolTableA"}}},
+      {"page_content": "b", "metadata": {"original_content": {"image": "niceImageB", "table": "coolTableB"}}},
+      {"page_content": "c", "metadata": {"original_content": {"image": "niceImageC", "table": "coolTableC"}}}
     ]
     expectedIds = [1, 2, 3]
 
