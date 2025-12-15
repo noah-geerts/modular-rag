@@ -1,0 +1,8 @@
+langchain
+unstructured
+unstructured[all-docs]
+unstructured-inference
+pillow-heif
+pdf2image
+langchain-openai
+python-dotenv
