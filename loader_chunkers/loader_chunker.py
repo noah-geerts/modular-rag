@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Set
-from langchain_core.documents import Document
+from rag_types.chunk import Chunk
 
 class LoaderChunker(ABC):
   @property
@@ -9,5 +9,5 @@ class LoaderChunker(ABC):
       pass
 
   @abstractmethod
-  def load_and_chunk(self, path: str) -> List[Document]:
+  def load_and_chunk(self, path: str) -> List[Chunk]:
     pass

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
-from langchain_core.documents import Document
+from rag_types.chunk import Chunk
 
 class Embedder(ABC):
   @abstractmethod
-  def embed_documents(self, documents: List[Document]):
+  def embed_chunks(self, chunks: List[Chunk]):
     pass

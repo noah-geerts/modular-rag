@@ -7,7 +7,7 @@ from unstructured.partition.auto import partition
 from unstructured.chunking.title import chunk_by_title
 from pathlib import Path
 from openai import OpenAI
-from ..rag_types.chunk import Chunk, Content
+from rag_types.chunk import Chunk, Content
 
 class MultiModalLoaderChunker(LoaderChunker):
 

@@ -25,9 +25,9 @@ class TestSQLiteChunkStorage(unittest.TestCase):
   def test_store_and_retrieve_chunks(self):
     # Arrange
     expectedChunks: List[Chunk] = [
-      {"page_content": "a", "metadata": {"original_content": {"image": "niceImageA", "table": "coolTableA"}}},
-      {"page_content": "b", "metadata": {"original_content": {"image": "niceImageB", "table": "coolTableB"}}},
-      {"page_content": "c", "metadata": {"original_content": {"image": "niceImageC", "table": "coolTableC"}}}
+      {"search_text": "a", "metadata": {"original_content": {"image": "niceImageA", "table": "coolTableA"}}},
+      {"search_text": "b", "metadata": {"original_content": {"image": "niceImageB", "table": "coolTableB"}}},
+      {"search_text": "c", "metadata": {"original_content": {"image": "niceImageC", "table": "coolTableC"}}}
     ]
     expectedIds = [1, 2, 3]
 
