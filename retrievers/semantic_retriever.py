@@ -1,24 +1,28 @@
 from typing import List
+from rag_types.vector import SemanticCandidate
 from retrievers.retriever import Retriever, rrf
-from rag_types.chunk import Chunk
 from vector_stores.vector_store import VectorStore
 from embedders.embedder import Embedder
 from concurrent.futures import ThreadPoolExecutor
 import itertools
 
 class SemanticRetriever(Retriever):
-  def __init__(self, vectorDb: VectorStore, embedder: Embedder, perQueryK: int = 10, finalK: int = 3):
+  def __init__(self, vectorDb: VectorStore, embedder: Embedder, semanticK: int = 10, finalK: int = 3):
     self.vectorDb = vectorDb
     self.embedder = embedder
-    self.perQueryK = perQueryK
+    self.perQueryK = semanticK
     self.finalK = finalK
 
-  def retrieve_chunks(self, queries: List[str]) -> List[Chunk]:
+  def retrieve_candidates(self, queries: List[str]) -> List[SemanticCandidate]:
+    # Check for no queries (makes no sense.. we can't retrieve for nothing)
+    N = len(queries)
+    if N == 0:
+      raise RuntimeError("No queries were provided to the SemanticRetriever's retrieve_candidates method")
+
     # Embed each query for vector search
     queryVectors = self.embedder.embed_strings(queries)
 
     # For each query, do retrieval (in parallel to reduce number of network RTT's)
-    N = len(queries)
     with ThreadPoolExecutor(max_workers=N) as ex:
       subresults = list(ex.map(self.vectorDb.semantic_search, queryVectors, itertools.repeat(self.perQueryK)))
 

@@ -48,6 +48,8 @@ class MultiQueryRewriter(QueryRewriter):
     )
 
     # Split and return
+    if response.choices[0].message.content is None:
+      raise RuntimeError("response.choices[0].message.content received from the LLM was None")
     queries = response.choices[0].message.content.split("|--|")
     queries = [query.strip() for query in queries]
     return queries
